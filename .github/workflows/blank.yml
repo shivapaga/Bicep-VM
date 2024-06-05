@@ -13,25 +13,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Debug JSON Content
-        run: |
-         echo "${{ secrets.AZURE_CREDENTIALS }}"
-         echo "${{ secrets.AZURE_CREDENTIALS }}" > azure_credentials.json  # Write to a file for debugging
+      - name: Print Azure Credentials JSON
+        run: echo "${{ secrets.AZURE_CREDENTIALS }}"
 
-      - name: Read Azure Credentials JSON File
+      - name: Read Azure Credentials JSON
         id: read_credentials
         run: |
           echo "${{ secrets.AZURE_CREDENTIALS }}" > azure_credentials.json
+          cat azure_credentials.json
+          jq . azure_credentials.json
           CLIENT_ID=$(jq -r '.clientId' azure_credentials.json)
           CLIENT_SECRET=$(jq -r '.clientSecret' azure_credentials.json)
           TENANT_ID=$(jq -r '.tenantId' azure_credentials.json)
+          SUBSCRIPTION_ID=$(jq -r '.subscriptionId' azure_credentials.json)
           echo "::set-output name=CLIENT_ID::$CLIENT_ID"
           echo "::set-output name=CLIENT_SECRET::$CLIENT_SECRET"
           echo "::set-output name=TENANT_ID::$TENANT_ID"
-
+          echo "::set-output name=SUBSCRIPTION_ID::$SUBSCRIPTION_ID"
 
       - name: Log in to Azure
         run: az login --service-principal -u ${{ steps.read_credentials.outputs.CLIENT_ID }} -p ${{ steps.read_credentials.outputs.CLIENT_SECRET }} --tenant ${{ steps.read_credentials.outputs.TENANT_ID }}
+
+      - name: Set Azure Subscription
+        run: az account set --subscription ${{ steps.read_credentials.outputs.SUBSCRIPTION_ID }}
 
       - name: Deploy VM using Bicep
         run: |
