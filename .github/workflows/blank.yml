@@ -20,6 +20,6 @@ jobs:
       - name: Deploy VM using Bicep
         run: |
           az deployment group create \
-            --resource-group YourResourceGroupName \
+            --resource-group azure-training \
             --template-file main.bicep \
             --parameters @parameters.json
