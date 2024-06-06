@@ -29,7 +29,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-07-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/networkInterfaces/{networkInterfaceName}'
+          id: '/subscriptions/4d56d29b-e3b4-46d6-88fe-26adb404a6fa/resourceGroups/azure-training/providers/Microsoft.Network/networkInterfaces/virtual-machine-5659511'
         }
       ]
     }
