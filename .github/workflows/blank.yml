@@ -20,5 +20,5 @@ jobs:
         run: |
           az deployment group create \
             --resource-group azure-training \
-            --template-file main.bicep \
+            --template-file .github/workflows/main.bicep \
             --parameters @parameters.json
